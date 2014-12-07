@@ -23,7 +23,7 @@ public class Card implements Comparable {
 	//+ funktsiooni deklareerimine
 	public Card (int value, Suit suit){
 		if (value < 2 && value > 14){
-			throw new RuntimeErrorException(new Error(), "Ai sa vana p@tu!");
+			throw new RuntimeErrorException(new Error(), "Ai sa vana p2tu!");
 		}
 		//viitan Card-ile
 		this.value = value;
@@ -37,7 +37,7 @@ public class Card implements Comparable {
 		return suit;
 	}
 
-	// compareTo meetod implementeerib meetodi interface'ist Comparable. võetud Googleist.
+	// compareTo meetod implementeerib meetodi interface'ist Comparable. Kopeeritud funktsionaalsus.
 	@Override
 	public int compareTo(Object another) {
 		Card card = (Card)another;

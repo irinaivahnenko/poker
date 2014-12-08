@@ -17,41 +17,63 @@ import java.util.ArrayList;
 
 //Loob akna, extenditakse implementeeritakse interface
 public class GameInterface extends JPanel implements ActionListener {
+    protected CardImagePanel cardImagePanel;
     protected JButton startButton, newHandButton;
-
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-
-    }
+    private GamePlayer player;
+    private Deck deck;
+    private JLabel label;
 
     public GameInterface() {
         startButton = new JButton("Alusta");
+        startButton.setActionCommand("Alusta");
         startButton.addActionListener(this);
 
         newHandButton = new JButton("Uus käsi");
+        newHandButton.setActionCommand("Uus");
         newHandButton.addActionListener(this);
 
         add(startButton);
         add(newHandButton);
+
     }
 
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Poker gameby Irina Ivahnenko");
+        frame.setSize(640, 480);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Akna sisu määramine
         GameInterface newContentPane = new GameInterface();
-        //sisu peab olema läbipaistev
 
-        // Siin tuleb teha mangija objekt
-        GamePlayer player = new GamePlayer();
+        //Määran aknale sisu muutujaga newContentPane (private)
+        newContentPane.setOpaque(true);
+        frame.setContentPane(newContentPane);
+        //Teeb akna nähtavaks
+        frame.setVisible(true);
+    }
 
-        // Siis tuleb teha kaardipakk.
-        Deck deck = new Deck();
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                createAndShowGUI();
+            }
 
-        // Segame kaardipaki
+        });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (actionEvent.getActionCommand().equals("Alusta")){
+            startGame();
+        }
+        else if (actionEvent.getActionCommand().equals("Uus")){
+            dealNewHand();
+        }
+    }
+
+    private void dealNewHand(){
+        // Jagame mängijale esimese käe
         deck.shuffle();
 
-        // Jagame mängijale esimese käe
         player.setCards(deck.getHand());
 
         // Siin võiks printida, mis käsi inimesel on.
@@ -65,29 +87,31 @@ public class GameInterface extends JPanel implements ActionListener {
         System.out.println(RankEvaluator.ranks[rank]);
 
         //Loon tekstipaneeli selleks, et kuvada kaardi kae kombinatsiooni ekraanil
-        JLabel label = new JLabel(RankEvaluator.ranks[rank]);
-        newContentPane.add(label);
+        if (label != null) remove(label);
+        label = new JLabel(RankEvaluator.ranks[rank]);
+        add(label);
 
         //Loon kaartide näitamise ekraanil
-        CardImagePanel cardImagePanel = new CardImagePanel(player.getCards());
-        newContentPane.add(cardImagePanel);
+        if (cardImagePanel != null) remove(cardImagePanel);
+        cardImagePanel = new CardImagePanel(player.getCards());
+        add(cardImagePanel);
 
-        //Määran aknale sisu muutujaga newContentPane (private)
-        newContentPane.setOpaque(true);
-        frame.setContentPane(newContentPane);
-        //Teeb akna nähtavaks
-        frame.pack();
-        frame.setVisible(true);
+        revalidate();
+        repaint();
     }
 
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                createAndShowGUI();
-            }
+    private void startGame(){
+        // Siin tuleb teha mangija objekt
+        player = new GamePlayer();
 
-        });
+        // Siis tuleb teha kaardipakk.
+        deck = new Deck();
+
+        // Segame kaardipaki
+        deck.shuffle();
+
+        dealNewHand();
     }
+
 }
 //Loob kaartide paneeli

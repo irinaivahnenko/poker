@@ -1,27 +1,32 @@
 package ee.irina.poker;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * @author Irina Ivahnenko
  * Kasutatud java Swing tutoriali.
  */
 
+/**
+ * @author Irina Ivahnenko
+ *
+ *
+ * Siit algab mäng. Mängu eesmärk on teenida 500 punkti. Alguses saab mängija 20 punkti. Iga käega on võimalik võita
+ * või kaotada punkte vastavalt pokkeri kombinatsioonile. Kui mängija kaotab kõik punktid, siis on mang labi. Mang algab
+ * programmi kaivitamisel ja loppeb kui mangija on voitnud voi kaotanud. Uue kae saab mangija kysida vajutades nupule
+ * "uus kasi".
+ *
+ */
 //Loob akna, extenditakse implementeeritakse interface
 public class GameInterface extends JPanel implements ActionListener {
     protected CardImagePanel cardImagePanel;
     protected JButton startButton, newHandButton;
     private GamePlayer player;
     private Deck deck;
-    private JLabel label;
+    private JLabel handLabel;
+    private JLabel pointsLabel;
 
     public GameInterface() {
         startButton = new JButton("Alusta");
@@ -71,9 +76,25 @@ public class GameInterface extends JPanel implements ActionListener {
     }
 
     private void dealNewHand(){
+
+        if (player.points < 2){
+            remove(newHandButton);
+            remove(startButton);
+            remove(handLabel);
+            remove(pointsLabel);
+            remove(cardImagePanel);
+            JLabel endLabel = new JLabel("Game Over");
+            add(endLabel);
+            revalidate();
+            repaint();
+            return;
+        }
+
+
         // Jagame mängijale esimese käe
         deck.shuffle();
 
+        player.points -= 2;
         player.setCards(deck.getHand());
 
         // Siin võiks printida, mis käsi inimesel on.
@@ -87,9 +108,14 @@ public class GameInterface extends JPanel implements ActionListener {
         System.out.println(RankEvaluator.ranks[rank]);
 
         //Loon tekstipaneeli selleks, et kuvada kaardi kae kombinatsiooni ekraanil
-        if (label != null) remove(label);
-        label = new JLabel(RankEvaluator.ranks[rank]);
-        add(label);
+        if (handLabel != null) remove(handLabel);
+        handLabel = new JLabel(RankEvaluator.ranks[rank]);
+        add(handLabel);
+
+        if (pointsLabel != null) remove(pointsLabel);
+        pointsLabel = new JLabel(String.valueOf(player.points));
+        add(pointsLabel);
+
 
         //Loon kaartide näitamise ekraanil
         if (cardImagePanel != null) remove(cardImagePanel);

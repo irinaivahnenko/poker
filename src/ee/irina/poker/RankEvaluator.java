@@ -26,6 +26,18 @@ public class RankEvaluator {
 			"One pair",
 			"High card"
 	};
+    public static final int[] points = new int [] {
+        1000,
+         500,
+         100,
+          50,
+          25,
+          20,
+          10,
+           5,
+           2,
+           0
+    };
 
 	/**
 	 *
@@ -50,16 +62,43 @@ public class RankEvaluator {
 	 */
 	public int evaluate(){
 		rank = 9;
-		if (isRoyalFlush()) {return rank = 0;}
-		if (isStraightFlush()) {return rank = 1;}
-		if (isFourOfAKind()) {return rank = 2;}
-		if (isFullHouse()) {return rank = 3;}
-		if (isFlush()) {return rank = 4;}
-		if (isStraight()) {return rank = 5;}
-		if (isThreeOfAKind()) {return rank = 6;}
+		if (isRoyalFlush()) {
+            player.points += points[0];
+            return rank = 0;
+        }
+		if (isStraightFlush()) {
+            player.points += points[1];
+            return rank = 1;
+        }
+		if (isFourOfAKind()) {
+            player.points += points[2];
+            return rank = 2;
+        }
+		if (isFullHouse()) {
+            player.points += points[3];
+            return rank = 3;
+        }
+		if (isFlush()) {
+            player.points += points[4];
+            return rank = 4;
+        }
+		if (isStraight()) {
+            player.points += points[5];
+            return rank = 5;
+        }
+		if (isThreeOfAKind()) {
+            player.points += points[6];
+            return rank = 6;
+        }
 		int num = numberOfPairs();
-		if (num == 2) {rank = 7;}
-		if (num == 1) {rank = 8;}
+		if (num == 2) {
+            player.points += points[7];
+            rank = 7;
+        }
+		if (num == 1) {
+            player.points += points[8];
+            rank = 8;
+        }
 		rank2 = cards.get(4).getValue();
 		rank3 = cards.get(3).getValue();
 		return rank;

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 
+ * Kaardipaki loomine, sorteerimine
  * @author Irina Ivahnenko
  *
  */
@@ -13,12 +13,10 @@ import java.util.List;
 public class Deck {
 	private static int Count = 52;
 
-	// hoain kaarte malus ja teen temast klassi muutuja
+	// hoain kaarte malus ja teen nendest klassi muutuja
 	private ArrayList<Card> cards;
 
-	// teen konstruktori initsialiseerimiseks
-	// + accessmodifier,valjakutsutav meetod(parameetri tyyp, tyybi
-	// nimi){funktsioon nt. if..}
+	// teen konstruktori initsialiseerimiseks, lisatud väljakutsutav meetod.
 	public Deck(){
 		ArrayList<Card> cards = new ArrayList<Card>();
 		for (int i = 0; i<Card.Suit.values().length; i++) {
@@ -29,17 +27,17 @@ public class Deck {
 		}
 		this.cards = cards;
 	}
-
+	//Segan kaardid
 	public void shuffle () {
 		Collections.shuffle(cards);
 	}
-
+	//jagan 5 kaarti
 	public List<Card> getHand() {
 		// võtame 5 esimest kaarti deckist.
 		return cards.subList(0, 5);
 	}
 
-	// lisan getteri
+	// lisan kaardipakki kaardid (getter) private muutuja jaoks.
 	public ArrayList<Card> getCards() {
 		return cards;
 	}

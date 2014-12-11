@@ -37,12 +37,23 @@ public class Card implements Comparable {
 		return suit;
 	}
 
-	// compareTo meetod implementeerib meetodi interface'ist Comparable. Kopeeritud funktsionaalsus.
+	/** compareTo meetod implementeerib meetodi interface'ist Comparable.
+	 *  Vordleb kahte erinevat kaarti, loogikat kasutame sorteerimisel.
+	 *
+	 * @param another
+	 * @return
+	 */
 	@Override
 	public int compareTo(Object another) {
 		Card card = (Card)another;
-		// kasutatud short-hand if-else'i
-		return this.value < card.value ?  -1: (this.value == card.value ? 0 : 1);
+		if (this.value < card.value){
+			return -1;
+		}
+		if (this.value == card.value){
+			return 0;
+		}
+		else return 1;
+
 	}
 
 }

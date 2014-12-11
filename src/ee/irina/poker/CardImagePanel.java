@@ -7,9 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-/**
+/**Loon kaartide interface'i
  * Created by Irina Ivahnenko on 8.12.14.
  */
+
+//korjab pildid failist ja kui pilti ei leita, tagastatakse error.
 public class CardImagePanel extends JPanel {
     public CardImagePanel(List<Card> cards){
         try{

@@ -4,22 +4,25 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
+/**Kasutatud java Swing tutoriali.
  * @author Irina Ivahnenko
- * Kasutatud java Swing tutoriali.
+ *
  */
 
 /**
- * @author Irina Ivahnenko
- *
- *
- * Siit algab mäng. Mängu eesmärk on teenida 500 punkti. Alguses saab mängija 20 punkti. Iga käega on võimalik võita
- * või kaotada punkte vastavalt pokkeri kombinatsioonile. Kui mängija kaotab kõik punktid, siis on mang labi. Mang algab
- * programmi kaivitamisel ja loppeb kui mangija on voitnud voi kaotanud. Uue kae saab mangija kysida vajutades nupule
- * "uus kasi".
+ * Siit algab mang. Mangu eesmark on teenida voita voi kaotada nii mitu punkti kui voimalik. Alguses saab mangija 20 punkti.
+ * Iga kaega on voimalik voita punkte vastavalt pokkeri kombinatsioonile.
+ * Mangija igakordne panus kaartide/kae saamiseks on 2 punkti.
+ * Uue kae saab mangija kysida vajutades nupule "uus käsi".
+ * Kui mangija kaotab koik punktid, siis on mang labi.
+ * Mang algab programmi kaivitamisel ja loppeb kui mangija on voitnud voi kaotanud.
  *
  */
-//Loob akna, extenditakse implementeeritakse interface
+
+/**Loob akna jaakna sisesed elemendid ja nende funktsioonid.
+ *
+ */
+//GameInterface ja selle muutujad
 public class GameInterface extends JPanel implements ActionListener {
     protected CardImagePanel cardImagePanel;
     protected JButton startButton, newHandButton;
@@ -28,9 +31,11 @@ public class GameInterface extends JPanel implements ActionListener {
     private JLabel handLabel;
     private JLabel pointsLabel;
 
+    //nuppude loomine, konstruktor
     public GameInterface() {
         startButton = new JButton("Alusta");
         startButton.setActionCommand("Alusta");
+        // this viitab (sisemisele) klassile
         startButton.addActionListener(this);
 
         newHandButton = new JButton("Uus käsi");
@@ -42,6 +47,7 @@ public class GameInterface extends JPanel implements ActionListener {
 
     }
 
+    //akna loomine
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Poker gameby Irina Ivahnenko");
         frame.setSize(640, 480);
@@ -55,6 +61,7 @@ public class GameInterface extends JPanel implements ActionListener {
         frame.setVisible(true);
     }
 
+    //käivitatakse aken (thread/loim)
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -65,7 +72,8 @@ public class GameInterface extends JPanel implements ActionListener {
         });
     }
 
-    @Override
+
+    //NB! @Override e. ülekirjutamine peab toimuma siis, kui klassi implementeeritakse interface nt. ActionListener.
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getActionCommand().equals("Alusta")){
             startGame();
@@ -74,7 +82,7 @@ public class GameInterface extends JPanel implements ActionListener {
             dealNewHand();
         }
     }
-
+    //mangu lopetamine, sisu taas joonistamine
     private void dealNewHand(){
 
         if (player.points < 2){
@@ -91,33 +99,31 @@ public class GameInterface extends JPanel implements ActionListener {
         }
 
 
-        // Jagame mängijale esimese käe
+        // Jagame mangijale esimese kae
         deck.shuffle();
 
         player.points -= 2;
         player.setCards(deck.getHand());
 
-        // Siin võiks printida, mis käsi inimesel on.
-        //player.printCards();
-
-        // Hindame kae kombinatsiooni
+        // Hindame kae kombinatsiooni.
         RankEvaluator evaluator = new RankEvaluator(player);
         int rank = evaluator.evaluate();
 
-        // Siin trükime välja käe kombinatsiooni.
+        // Siin trykime valja kae kombinatsiooni.
         System.out.println(RankEvaluator.ranks[rank]);
 
-        //Loon tekstipaneeli selleks, et kuvada kaardi kae kombinatsiooni ekraanil
+        //Loon tekstipaneeli selleks, et kuvada kaardi kae kombinatsiooni ekraanil, emaldan eelmise kae kombinatsiooni.
         if (handLabel != null) remove(handLabel);
         handLabel = new JLabel(RankEvaluator.ranks[rank]);
         add(handLabel);
 
+        //vana punktiseis eemaldatakse, lisatakse uus seis.
         if (pointsLabel != null) remove(pointsLabel);
         pointsLabel = new JLabel(String.valueOf(player.points));
         add(pointsLabel);
 
 
-        //Loon kaartide näitamise ekraanil
+        //Loon kaartide näitamise ekraanil.
         if (cardImagePanel != null) remove(cardImagePanel);
         cardImagePanel = new CardImagePanel(player.getCards());
         add(cardImagePanel);
@@ -125,7 +131,7 @@ public class GameInterface extends JPanel implements ActionListener {
         revalidate();
         repaint();
     }
-
+    //Mangu alustamine
     private void startGame(){
         // Siin tuleb teha mangija objekt
         player = new GamePlayer();
@@ -136,8 +142,9 @@ public class GameInterface extends JPanel implements ActionListener {
         // Segame kaardipaki
         deck.shuffle();
 
+        //jagame kaardid mangijale
         dealNewHand();
     }
 
 }
-//Loob kaartide paneeli
+

@@ -4,14 +4,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Antud klass aitab arvutada playeri kaes olevat viiest kaardist koosneva kombinatsiooni 0śt 9ńi.
+ * Antud klass aitab arvutada mangija/playeri kaes olevat viiest kaardist koosneva kombinatsiooni (parimast)0śt 9ńi.
  * Kokku 10 kombinatsiooni
  * @author Irina Ivahnenko
  */
 public class RankEvaluator {
-	private int rank2 = 0;
 	private int rank = 9;
-	private int rank3 = 0;
 	private GamePlayer player;
 	private List<Card> cards;
 	public static final String[] ranks = new String[]{
@@ -26,6 +24,7 @@ public class RankEvaluator {
 			"One pair",
 			"High card"
 	};
+	//punktid vastavalt kaardi kombinatioonile
     public static final int[] points = new int [] {
         1000,
          500,
@@ -99,8 +98,6 @@ public class RankEvaluator {
             player.points += points[8];
             rank = 8;
         }
-		rank2 = cards.get(4).getValue();
-		rank3 = cards.get(3).getValue();
 		return rank;
 	}
 	//Kas viimane kaart on ass ja esimene kaart on 10? Tegemist on reaga, kus kõrgeim kaart on ass ja nad on ühest mastist.
@@ -124,14 +121,10 @@ public class RankEvaluator {
 		if (cards.get(0).getValue() == cards.get(2).getValue() &&
 				cards.get(3).getValue() == cards.get(4).getValue()){
 			//Jaetakse meelde, milliseid kaarte sul on kaks ja milliseid kolm
-			rank2 = cards.get(0).getValue();
-			rank3 = cards.get(4).getValue();
 			fullHouse = true;
 		}
 		if (cards.get(0).getValue() == cards.get(1).getValue() &&
 				cards.get(2).getValue() == cards.get(4).getValue()) {
-			rank2 = cards.get(2).getValue();
-			rank3 = cards.get(0).getValue();
 			fullHouse = true;
 		}
 		return fullHouse;
@@ -163,33 +156,30 @@ public class RankEvaluator {
 					cards.get(2).getValue() == cards.get(4).getValue();
 
 	}
-	// Kas on paare? Mitu paari on kaes.
+	// Tagastab mitu paari on kaes.
 	private int numberOfPairs(){
-		int pairs = 0, temp = 0;
+		int pairs = 0;
 		for (int i = 0; i<4; i++){
-			temp = isNumberOfAKind(cards.subList(i, i+2), 2);
-			if (temp != 0) {
+			if(hasPair(cards.subList(i, i+2))){
 				pairs++;
-				rank2 = temp;
 			}
 		}
 		return pairs;
 	}
-	//Eraldi funktsioon, mis arvutab ranki(nt. paaride korduvust. Kopeeritud funktsioon.
-	private int isNumberOfAKind(List<Card> cards, int number) {
-
+	//Funktsioon tagastab kas kaartide hulgas on paar
+	private boolean hasPair(List<Card> cards) {
 		for(int value=2; value<=14; value++) {
-			int count = 0, temp=0;
+			int count = 0;
 			for (int i = 0; i < cards.size(); i++){
 				if (cards.get(i).getValue()==value) {
-					temp=cards.get(i).getValue();
 					count++;
 				}
 			}
-			if (count==number) {
-				return temp;
+			// count peab olema täpselt 2,et oleks paar
+			if (count==2) {
+				return true;
 			}
 		}
-		return 0;
+		return false;
 	}
 }
